@@ -1,6 +1,6 @@
 " Description: Open require/@import file
 " Author: Asins <asinsimple@gmail.com>
-" Last Modified: 2016-03-02 23:56 (+0800)
+" Last Modified: 2016-03-03 01:22 (+0800)
 " License: MIT
 
 " 变量设置 {{{1
@@ -62,18 +62,14 @@ function! <SID>FormatPath(path, ...)
 		return s:path
 	endif
 
-	" 2. 使用传入的文件后缀
-	if a:0 > 0
-		return s:path. '.' .a:1
-	endif
 
-	" 3. 使用当前文件相同的后缀
+	" 2. 使用当前文件相同的后缀
 	let s:suffix = expand('%:e')
 	if s:suffix != ''
 		return s:path. '.' .s:suffix
 	endif
 
-	" 4. 以上不满足则认为文件无后缀
+	" 3. 以上不满足则认为文件无后缀
 	return s:path
 endfunction
 " }}}
@@ -86,10 +82,10 @@ function! <SID>GetCursorFilePath()
 	"     require ( 'xx/oo');
 	"     require("xx/oo.txt")
 	"  以下正则为 \v.*require\s*\(("|')([^\1]+)\1\);?.* 单引号加入报错固加链接符 TODO
-	let jsFilePath = substitute(lineStr, '\v.*require\s*\(("|' . "'" . ')([^\1]+)\1\);?.*', '\2', '')
-	if lineStr != jsFilePath
-		" echo '2.1 '. jsFilePath
-		return <SID>FormatPath(jsFilePath, 'js')
+	let requirePath = substitute(lineStr, '\v.*require\s*\(("|' . "'" . ')([^\1]+)\1\);?.*', '\2', '')
+	if lineStr != requirePath
+		" echo '2.1 '. requirePath
+		return <SID>FormatPath(requirePath)
 	endif
 
 	" 2. CSS/Less/Scss 引入方式 识别：
@@ -97,25 +93,25 @@ function! <SID>GetCursorFilePath()
 	"     @import "./xxx/oo";
 	"     @import '../xx/oo.css'
 	"  以下正则为 \v\@import\s+("|')([^\1]+)\1; 单引号加入报错固加链接符 TODO
-	let cssFilePath = substitute(lineStr, '\v\@import\s+("|' ."'" .')([^\1]+)\1;?', '\2', '')
-	if lineStr != cssFilePath
-		" echo '2.2 '. cssFilePath
-		return <SID>FormatPath(cssFilePath, 'css')
+	let importPath = substitute(lineStr, '\v\@import\s+("|' ."'" .')([^\1]+)\1;?', '\2', '')
+	if lineStr != importPath
+		" echo '2.2 '. importPath
+		return <SID>FormatPath(importPath)
 	endif
 
 	" 3. 无规则的文件引入，如css中的图片引入 识别：
 	"     'oo/xx'
 	"     "../oo/xx"
 	let cword = expand('<cWORD>')
-	let otherFilePath = substitute(cword, '\v.*("|' . "'" . ')([^\1]+)\1.*', '\2', '')
-	if cword != otherFilePath
-		" echo '2.3 '.otherFilePath
-		return <SID>FormatPath(otherFilePath)
+	let otherPath = substitute(cword, '\v.*("|' . "'" . ')([^\1]+)\1.*', '\2', '')
+	if cword != otherPath
+		" echo '2.3 '.otherPath
+		return <SID>FormatPath(otherPath)
 	endif
-	let otherFilePath = substitute(getline('.'), '\v.*("|' . "'" . ')([^\1]+)\1.*', '\2', '')
-	if lineStr != otherFilePath
-		" echo '2.4 '.otherFilePath
-		return <SID>FormatPath(otherFilePath)
+	let otherPath = substitute(getline('.'), '\v.*("|' . "'" . ')([^\1]+)\1.*', '\2', '')
+	if lineStr != otherPath
+		" echo '2.4 '.otherPath
+		return <SID>FormatPath(otherPath)
 	endif
 
 	return ''
@@ -170,7 +166,10 @@ function <SID>GetFilesProjectRootPath(filePath)
 		" 向上查找文件
 		let pathByFile = findfile(markStr, curFilePath.';')
 		if pathByFile != ''
-			return fnamemodify(pathByFile, ':p:h:h')
+			let pathByFile fnamemodify(pathByFile, ':p:h:h')
+			" 如果存在src子目录，则Root为src目录
+			let srcInPath = finddir('src', pathByFile)
+			return srcInPath != '' ? srcInPath : pathByDir
 		endif
 	endfor
 

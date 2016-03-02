@@ -36,7 +36,7 @@ Plug 'asins/openRequireFile.vim'
 
 ## 路径规则
 
-通过使用特定规则识别出光标所在行的有效路径。支持打开相对 (./xx)、关系目录 (../xx)、绝对地址 (xx/oo) 方式的路径。
+通过使用特定规则识别出光标所在行的有效路径。支持打开相对 (./xx)、关系路径 (../xx)、绝对路径 (xx/oo) 方式的地址。
 
 注意：绝对地址方式需要先指定项目根目录地址。
 
@@ -54,7 +54,6 @@ Plug 'asins/openRequireFile.vim'
 ### 补全后缀名优先级
 
  1. 默认使用路径自带后缀
- 2. 使用传入后缀， 如 `require`语法的后缀为`js`，`@import`语法后缀为`css`
  3. 使用当前文件相同后缀
  4. 以上不满足则认为无文件后缀
 
@@ -80,8 +79,16 @@ require('lib/zepto'); // open: ~/project/src/js/lib/zepto.js
 例 3：当前文件为`~/project/src/css/index/test.less`，存在`~/project/.git`目录，在`vimrc`中设置`let g:OpenRequireFile_By_Map = [$HOME.'/project/src/css']
 
 ```js
-@import 'g/nav'; // open: ~/project/src/css/g/nav.css
+@import 'g/nav'; // open: ~/project/src/css/g/nav.less
+@import "g/nav'; // open Error!  " != '
 @import    "../nav/index.css' // open: ~/project/src/css/nav/index.css
+@import "index" // open: ~/project/src/css/index.less
+```
+
+例 4：当前文件为`~/project/src/js/index/tpl/test.tpl`，存在`~/project/.git`目录，在`vimrc`中设置`let g:OpenRequireFile_By_Map = [$HOME.'/project/src/js']
+
+```html
+<p>打开文件<%=include('./na|v.tpl')%>   // | 为光标所在位置   open: ~/project/src/js/index/tpl/nav.tpl
 ```
 
 ## 变量
