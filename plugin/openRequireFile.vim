@@ -1,6 +1,6 @@
 " Description: Open require/@import file
 " Author: Asins <asinsimple@gmail.com>
-" Last Modified: 2016-03-03 01:22 (+0800)
+" Last Modified: 2016-03-03 01:39 (+0800)
 " License: MIT
 
 " 变量设置 {{{1
@@ -22,8 +22,8 @@ if !exists('g:OpenRequireFile_By_Map') || type(g:OpenRequireFile_By_Map) != 3
 endif
 
 " 项目版本仓库，数据类型：列表，查找顺序: 靠前者优先
-if !exists('g:OpenRequireFile_By_Repository') || type(g:OpenRequireFile_By_Repository) != 3
-	let g:OpenRequireFile_By_Repository = ['.git', '.svn', '.hg']
+if !exists('g:OpenRequireFile_By_Mark') || type(g:OpenRequireFile_By_Mark) != 3
+	let g:OpenRequireFile_By_Mark = ['.git', '.svn', '.hg']
 endif
 " }}}
 
@@ -144,7 +144,7 @@ function <SID>GetFilesProjectRootPath(filePath)
 	endwhile
 
 	" " 2. 基于版本仓库目录定位项目Root
-	" for dirPath in g:OpenRequireFile_By_Repository
+	" for dirPath in g:OpenRequireFile_By_Mark
 		" let verPath = finddir(dirPath, curFilePath.';') " 向上查找
 		" " echo '3.2 '.verPath
 		" if verPath != ''
