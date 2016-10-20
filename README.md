@@ -64,9 +64,12 @@ Plug 'asins/openRequireFile.vim'
 
 ```js
 require('lib/zepto'); // open: ~/project/lib/zepto.js
-require("lib/zepto'); // open Error!  " != '
+require("lib/zepto'); // open Error!  " != ' Label mismatch.
 require(lib/zepto); // open Error!  need ' or "
-require("./test.tpl") // open: ~/project/asins/test.tpl
+
+// file path: ~/project/src/js/test.js
+require("./test.tpl") // open: ~/project/js/test.tpl
+// file path: ~/project/src/js/g/nav/test.js
 require("../../lib/zepto") // open: ~/project/lib/zepto.js
 ```
 
@@ -79,9 +82,16 @@ require('lib/zepto'); // open: ~/project/src/js/lib/zepto.js
 例 3：当前文件为`~/project/src/css/index/test.less`，存在`~/project/.git`目录，在`vimrc`中设置`let g:OpenRequireFile_By_Map = [$HOME.'/project/src/css']
 
 ```js
+/*
+ * file path: ~/project/src/css/test.css
+ * and the .vimrc is set: let g:OpenRequireFile_By_Map = [$HOME.'/project/src/css']
+ */
 @import 'g/nav'; // open: ~/project/src/css/g/nav.less
-@import "g/nav'; // open Error!  " != '
+@import "g/nav'; // open Error!  " != ' Label mismatch.
+
+// file path: ~/project/src/css/g/test.css
 @import    "../nav/index.css' // open: ~/project/src/css/nav/index.css
+// file path: ~/project/src/css/test.css
 @import "index" // open: ~/project/src/css/index.less
 ```
 
