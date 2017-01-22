@@ -1,6 +1,6 @@
 " Description: Open require/@import file
 " Author: Asins <asinsimple@gmail.com>
-" Last Modified: 2016-03-03 01:39 (+0800)
+" Last Modified: 2017-01-22 20:56 (+0800)
 " License: MIT
 
 " 变量设置 {{{1
@@ -189,7 +189,7 @@ function! OpenRequireFile(...)
 	endif
 
 	" ./file or  ../file
-	if strridx(filePath, './') == 0 || strridx(filePath, '../') == 0
+	if stridx(filePath, './') == 0 || stridx(filePath, '../') == 0
 		let fullPath = fnamemodify(filePath, ':p')
 	else " 绝对引入
 		" echo '1.1 绝对引入'
@@ -197,7 +197,7 @@ function! OpenRequireFile(...)
 		let fullPath = prefpath .'/'. filePath
 	endif
 	let fullPath = <SID>ReplaceSeparator(fullPath)
-	" echo '0. fullPath = '. fullPath
+	" echo '0 fullPath = '. fullPath
 
 	if findfile(fullPath) == ''
 		echo 'File not exist, Create now: '. fullPath
