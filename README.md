@@ -81,7 +81,7 @@ require('lib/zepto'); // open: ~/project/src/js/lib/zepto.js
 
 例 3：当前文件为`~/project/src/css/index/test.less`，存在`~/project/.git`目录，在`vimrc`中设置`let g:OpenRequireFile_By_Map = [$HOME.'/project/src/css']
 
-```js
+```css
 /*
  * file path: ~/project/src/css/test.css
  * and the .vimrc is set: let g:OpenRequireFile_By_Map = [$HOME.'/project/src/css']
@@ -142,5 +142,3 @@ let g:OpenRequireFile_By_Repository = [
 这是我写的第一插件，质量以及性能上应该都有问题，也希望 VIML 达人指点，谢谢！
 
 License: MIT
-
-使用特定正则识别光标所在行有效路径，主要是以下优先级进行：

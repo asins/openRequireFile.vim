@@ -1,6 +1,6 @@
 " Description: Open require/@import file
 " Author: Asins <asinsimple@gmail.com>
-" Last Modified: 2017-01-22 20:56 (+0800)
+" Last Modified: 2017-06-06 18:12 (+0800)
 " License: MIT
 
 " 变量设置 {{{1
@@ -118,8 +118,8 @@ function! <SID>GetCursorFilePath()
 endfunction
 " }}}
 " 获取项目目录 {{{1
-function <SID>GetFilesProjectRootPath(filePath)
-	let curFilePath = fnamemodify(a:filePath, ':p:h')
+function <SID>GetFilesProjectRootPath()
+	let curFilePath = expand('%:p:h')
 
 	" 1. 基于Map查找项目Root TODO 更好的实现方式
 	let findRoot4Map = curFilePath
@@ -190,14 +190,14 @@ function! OpenRequireFile(...)
 
 	" ./file or  ../file
 	if stridx(filePath, './') == 0 || stridx(filePath, '../') == 0
-		let fullPath = fnamemodify(filePath, ':p')
+		let fullPath = simplify(expand('%:p:h') . '/' . filePath)
 	else " 绝对引入
 		" echo '1.1 绝对引入'
-		let prefpath = <SID>GetFilesProjectRootPath('<sfile>')
+		let prefpath = <SID>GetFilesProjectRootPath()
 		let fullPath = prefpath .'/'. filePath
 	endif
 	let fullPath = <SID>ReplaceSeparator(fullPath)
-	" echo '0 fullPath = '. fullPath
+	" echo '0. fullPath = '. fullPath
 
 	if findfile(fullPath) == ''
 		echo 'File not exist, Create now: '. fullPath
